@@ -356,6 +356,11 @@ function compile_js_load(cx, state, options, import_path, real_path, name, wasm,
         initialize = `exports.default(loadFile(final_path))`;
     }
 
+    if (options.useRequire) {
+        // Synchronously load the module after requiring it
+        initialize = "exports.initSync(require(final_path))";
+    }
+
 
     let export_code = "";
 
@@ -373,7 +378,11 @@ function compile_js_load(cx, state, options, import_path, real_path, name, wasm,
     } else {
         if (options.experimental.directExports) {
             sideEffects = true;
-            main_code = `const final_path = wasm_path; await ${initialize};`;
+            if (options.useRequire) {
+                main_code = `const final_path = wasm_path; ${initialize};`;
+            } else {
+                main_code = `const final_path = wasm_path; await ${initialize};`;
+            }
 
         } else if (is_entry) {
             sideEffects = true;
@@ -560,6 +569,10 @@ module.exports = function rust(options = {}) {
 
     if (options.nodejs == null) {
         options.nodejs = false;
+    }
+
+    if (options.useRequire == null) {
+        options.useRequire = false;
     }
 
     if (options.experimental == null) {
