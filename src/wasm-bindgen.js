@@ -105,7 +105,7 @@ async function run_wasm_bindgen(dir, wasm_path, out_dir, options) {
         "--omit-default-module-path",
     ];
 
-    if (options.experimental.typescriptDeclarationDir == null) {
+    if (!options.typescriptDeclartions && options.experimental.typescriptDeclarationDir == null) {
         wasm_bindgen_args.push("--no-typescript");
     }
 

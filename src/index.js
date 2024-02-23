@@ -575,6 +575,10 @@ module.exports = function rust(options = {}) {
         options.useRequire = false;
     }
 
+    if (options.typescriptDeclarations == null) {
+        options.typescriptDeclarations = false;
+    }
+
     if (options.experimental == null) {
         options.experimental = {};
     }
