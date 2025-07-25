@@ -49,7 +49,7 @@ async function run_cargo(dir, options) {
         cargo_args.push("--config");
         cargo_args.push("profile.dev.debug=false");
 
-    // https://doc.rust-lang.org/cargo/reference/profiles.html#release
+        // https://doc.rust-lang.org/cargo/reference/profiles.html#release
     } else {
         cargo_args.push("--release");
 
@@ -124,7 +124,7 @@ async function compile_rust(cx, dir, id, target_dir, source, options) {
 
     try {
         // TODO maybe it can run `cargo fetch` without locking ?
-        return await lock(async function () {
+        return await lock(async function() {
             if (options.verbose) {
                 debug(`Compiling ${id}`);
                 debug(`Using target directory ${target_dir}`);
@@ -174,13 +174,13 @@ async function compile_rust(cx, dir, id, target_dir, source, options) {
 
 async function watch_files(cx, dir, options) {
     if (options.watch) {
-        const matches = await Promise.all(options.watchPatterns.map(function (pattern) {
+        const matches = await Promise.all(options.watchPatterns.map(function(pattern) {
             return glob(pattern, dir);
         }));
 
         // TODO deduplicate matches ?
-        matches.forEach(function (files) {
-            files.forEach(function (file) {
+        matches.forEach(function(files) {
+            files.forEach(function(file) {
                 cx.addWatchFile(file);
             });
         });
@@ -360,7 +360,7 @@ function compile_js_load(cx, state, options, import_path, real_path, name, wasm,
 
     if (options.useRequire) {
         // Synchronously load the module after requiring it
-        initialize = "exports.initSync(require(final_path))";
+        initialize = "exports.initSync({ module: require(final_path) })";
     }
 
 
@@ -549,7 +549,7 @@ module.exports = function rust(options = {}) {
     }
 
     if (options.importHook == null) {
-        options.importHook = function (path) { return JSON.stringify(path); };
+        options.importHook = function(path) { return JSON.stringify(path); };
     }
 
     if (options.serverPath == null) {
@@ -654,7 +654,7 @@ module.exports = function rust(options = {}) {
                         };
                     }
 
-                // Rewrites the fake file paths to real file paths.
+                    // Rewrites the fake file paths to real file paths.
                 } else if (importer && id[0] === ".") {
                     const info = this.getModuleInfo(importer);
 
@@ -715,7 +715,7 @@ module.exports = function rust(options = {}) {
                                 };
                             }
 
-                        // This compiles the Cargo.toml
+                            // This compiles the Cargo.toml
                         } else {
                             if (id.endsWith(ENTRY_SUFFIX)) {
                                 return load_cargo_toml(this, state, id.slice(0, -ENTRY_SUFFIX.length), true, meta, options);
