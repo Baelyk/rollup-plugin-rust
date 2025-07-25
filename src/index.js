@@ -28,6 +28,8 @@ async function run_cargo(dir, options) {
 
     let cargo_args = [
         "rustc",
+        "-Zbuild-std=panic_abort,std",
+        "--config", "build.rustflags=['-Ctarget-cpu=mvp']",
         "--lib",
         "--target", "wasm32-unknown-unknown",
         "--crate-type", "cdylib", // Needed for wasm-bindgen to work
